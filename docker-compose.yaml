@@ -1,6 +1,7 @@
+
 version: '3'
 services:
-   my-app:
+  my-app:
     build:
       context: .
       dockerfile: Dockerfile
@@ -14,15 +15,8 @@ services:
       - mongodb
     env_file:
       - .env
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    labels:
-      - "my-app"
-  
-   mongodb:
+   
+  mongodb:
     image: mongo:8.0.5
     container_name: mongodb
     restart: always
@@ -35,15 +29,11 @@ services:
       - mongo-data:/data/db
     env_file:
       - .env
-    healthcheck:
-      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-   mongo-express:
-    image: mongo-express
+    
+  mongo-express:
+    image: mongo-express      
     container_name: mongo-express
-    restart: always # fixes MongoNetworkError when mongodb is not ready when mongo-express starts
+    restart: always
     ports:
       - 8080:8081
     environment:
@@ -56,11 +46,7 @@ services:
       - mongodb
     env_file:
       - .env
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8081"]
-      interval: 30s
-      timeout: 10s
-      retries: 5     
+    
 volumes:
   mongo-data:
     driver: local

@@ -16,11 +16,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Log in to Docker Hub
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+      - name: Debug Docker Credentials
+        run: |
+          echo "Username: ${{ secrets.DOCKER_USERNAME }}"
+          echo "Password Length: ${#DOCKER_PASSWORD}"
 
       - name: Build the Docker Image
         run: docker build -t uadeel/cdrepo:${{ github.sha }} .

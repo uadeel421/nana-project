@@ -28,8 +28,12 @@ app.get('/health', function (req, res) {
 // use when starting application locally
 let mongoUrlLocal = `mongodb://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PWD}@localhost:27017`;
 
-// use when starting application as docker container
-let mongoUrlDocker = `mongodb://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PWD}@mongodb:27017`;
+// use when starting application as docker container (Docker-compose)
+//let mongoUrlDocker = `mongodb://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PWD}@mongodb:27017`;
+
+// use when starting application in K8s
+let mongoUrlDocker = `mongodb://${process.env.USER_NAME}:${process.env.USER_PWD}@${process.env.DB_URL}:27017`;
+
 
 // pass these options to mongo client connect request to avoid DeprecationWarning for current Server Discovery and Monitoring engine
 let mongoClientOptions = { useNewUrlParser: true, useUnifiedTopology: true };

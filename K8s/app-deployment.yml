@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: 
+        image: uadeel421/nana-project:94f668c5d1776516bbc795697621ee73f4a589cf        #myapp image that i created using CD
         ports:
         - containerPort: 3000
         env:
@@ -24,17 +24,17 @@ spec:
           valueFrom:
             secretKeyRef:
               name: mongo-secret
-              mongo-user: mongo-user
+              key: mongo-user
         - name: USER_PWD 
           valueFrom:
             secretKeyRef:
               name: mongo-secret
-              mongo-password: mongo-password 
+              key: mongo-password 
         - name: DB_URL #DB endpoint
           valueFrom:
-          configMapKeyRef:
-            name: mongo-config
-            key: mongo-url 
+            configMapKeyRef:
+              name: mongo-config
+              key: mongo-url 
 
 ---
 apiVersion: v1
@@ -49,4 +49,4 @@ spec:
     - protocol: TCP
       port: 3000
       targetPort: 3000 
-      NodePort: 30100
+      nodePort: 30100

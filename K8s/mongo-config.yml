@@ -3,5 +3,4 @@ kind: ConfigMap
 metadata:
   name: mongo-config
 data:
-mongo-url: mongo-service  # Service name of MongoDB running in Kubernetes
-
+  mongo-url: mongo-service  # Service name of MongoDB running in Kubernetes

@@ -1,16 +1,10 @@
-
 version: '3'
 services:
   my-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: uadeel421/nana-project:1c9e1afe8e08e8d43a44f8d84e2b28de175619f4
     container_name: my-app
     ports:
       - 3000:3000
-    environment:
-      MONGO_DB_USERNAME: ${MONGO_ROOT_USER}
-      MONGO_DB_PWD: ${MONGO_ROOT_PASSWORD}
     depends_on:
       - mongodb
     env_file:
@@ -23,8 +17,8 @@ services:
     ports:
       - 27017:27017
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${USER_NAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${USER_PWD}
     volumes:
       - mongo-data:/data/db
     env_file:
@@ -37,8 +31,8 @@ services:
     ports:
       - 8080:8081
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_EXPRESS_LOGIN}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_EXPRESS_PASSWORD}
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${USER_NAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${USER_PWD}
       ME_CONFIG_MONGODB_SERVER: mongodb
       ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_LOGIN}
       ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASSWORD}

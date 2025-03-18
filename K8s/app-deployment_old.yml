@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: uadeel421/nana-project:94f668c5d1776516bbc795697621ee73f4a589cf        #myapp image that i created using CD
+        image: uadeel421/nana-project:1c9e1afe8e08e8d43a44f8d84e2b28de175619f4
         ports:
         - containerPort: 3000
         env:
@@ -42,11 +42,10 @@ kind: Service
 metadata:
   name: webapp-service
 spec:
-  type: NodePort #for external access
+  type: ClusterIP
   selector:
       app: webapp
   ports:
     - protocol: TCP
-      port: 3000
-      targetPort: 3000 
-      nodePort: 30100
+      port: 80
+      targetPort: 3000

@@ -1,4 +1,4 @@
-// filepath: /d:/WorkFolder/OneDrive - Knowledge Platform/My Git Projects/nana-project/app/server.js
+// Used to create a simple Express server that serves a static HTML file and a profile picture.
 let express = require('express');
 let path = require('path');
 let fs = require('fs');
@@ -16,7 +16,7 @@ app.get('/', function (req, res) {
   });
 
 app.get('/profile-picture', function (req, res) {
-  let img = fs.readFileSync(path.join(__dirname, "images/profile-2.jpg"));
+  let img = fs.readFileSync(path.join(__dirname, "images/profile-1.jpg"));
   res.writeHead(200, {'Content-Type': 'image/jpg' });
   res.end(img, 'binary');
 });
@@ -29,11 +29,7 @@ app.get('/health', function (req, res) {
 let mongoUrlLocal = `mongodb://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PWD}@localhost:27017`;
 
 // use when starting application as docker container (Docker-compose)
-//let mongoUrlDocker = `mongodb://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PWD}@mongodb:27017`;
-
-// use when starting application in K8s
-let mongoUrlDocker = `mongodb://${process.env.USER_NAME}:${process.env.USER_PWD}@${process.env.DB_URL}:27017`;
-
+let mongoUrlDocker = `mongodb://${process.env.USER_NAME}:${process.env.USER_PWD}@${process.env.DB_URL}`;
 
 // pass these options to mongo client connect request to avoid DeprecationWarning for current Server Discovery and Monitoring engine
 let mongoClientOptions = { useNewUrlParser: true, useUnifiedTopology: true };

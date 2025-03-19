@@ -1,7 +1,9 @@
 version: '3'
 services:
   my-app:
-    image: uadeel421/nana-project:1c9e1afe8e08e8d43a44f8d84e2b28de175619f4
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: my-app
     ports:
       - 3000:3000

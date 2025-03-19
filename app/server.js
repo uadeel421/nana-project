@@ -4,7 +4,7 @@ let fs = require('fs');
 let MongoClient = require('mongodb').MongoClient;
 let app = express();
 
-
+// bodyParser was deprecated: https://stackoverflow.com/a/59892173
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -13,19 +13,20 @@ app.get('/', function (req, res) {
   });
 
 app.get('/profile-picture', function (req, res) {
-  let img = fs.readFileSync(path.join(__dirname, "images/profile-2.jpg"));
+  let img = fs.readFileSync(path.join(__dirname, "images/profile-1.jpg"));
   res.writeHead(200, {'Content-Type': 'image/jpg' });
   res.end(img, 'binary');
 });
 
 // use when starting application locally
-let mongoUrlLocal = `mongodb://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PWD}@localhost:27017`;
+//let mongoUrlLocal = `mongodb://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PWD}@localhost:27017`;
 
 // use when starting application as docker container (Docker-compose)
-let mongoUrlDocker = `mongodb://${process.env.USER_NAME}:${process.env.USER_PWD}@${process.env.DB_URL}`;
+//let mongoUrlDocker = `mongodb://${process.env.USER_NAME}:${process.env.USER_PWD}@${process.env.DB_URL}`;
 
 //k8s
 let mongoUrlK8s = `mongodb://${process.env.USER_NAME}:${process.env.USER_PWD}@${process.env.DB_URL}`
+
 // pass these options to mongo client connect request to avoid DeprecationWarning for current Server Discovery and Monitoring engine
 let mongoClientOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 

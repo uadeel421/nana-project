@@ -43,7 +43,7 @@ jobs:
         run: echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
 
       - name: Build the Docker Image
-        run: docker build -t uadeel421/nana-project:${{ github.sha }} .
+        run: docker build -t uadeel421/nana-project:latest .
 
       - name: Push Docker Image to Docker Hub
-        run: docker push uadeel421/nana-project:${{ github.sha }}
+        run: docker push uadeel421/nana-project:latest

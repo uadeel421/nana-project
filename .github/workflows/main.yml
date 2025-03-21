@@ -67,8 +67,13 @@ jobs:
             --tag uadeel421/nana-project:latest \
             --tag uadeel421/nana-project:${{ env.TAG }} \
             --push .
+            
+      - name: Set Up Cosign
+        uses: sigstore/cosign-installer@v3.5.0
+        with:
+          cosign-release: 'v2.2.4'      
 
-      - name: Cosign the Image
+      - name: Cosign the Image (OIDC-based)
         env:
           COSIGN_EXPERIMENTAL: "true"
         run: |
@@ -76,6 +81,4 @@ jobs:
             --oidc-client-id sigstore \
             uadeel421/nana-project:${{ env.TAG }}
 
-      - name: Cosign the Image
-        run: cosign sign --yes uadeel421/nana-project@${{ env.TAG }}
 

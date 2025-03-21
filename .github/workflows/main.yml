@@ -1,12 +1,22 @@
 name: Node.js CI/CD Pipeline
 
 on:
-  push:
+  push: #An event that will trigger when code "Push" or "Pull" to the main
+    branches: ["main"]
+    
+  pull_request:
     branches: [ "main" ]
+  workflow_dispatch:  # Allows manual triggering
+  schedule:
+    - cron: '0 2 * * *'  # Runs daily at 2 AM UTC
 
 jobs:
   ci:
+    name: Continuous Integration
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20]  # Run tests on multiple Node.js versions
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -14,7 +24,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
           cache-dependency-path: app/package-lock.json
 
@@ -22,11 +32,16 @@ jobs:
         run: npm ci
         working-directory: app
 
+      - name: Run Linter
+        run: npm run lint
+        working-directory: app
+
       - name: Run Tests
         run: npm test
         working-directory: app
 
   cd:
+    name: Continuous Deployment
     needs: ci  # ✅ Only runs if CI passes
     runs-on: ubuntu-latest
     steps:
@@ -42,8 +57,26 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
 
-      - name: Build the Docker Image
-        run: docker build -t uadeel421/nana-project:latest .
+      - name: Get Version & Generate Tags
+        id: version
+        run: |
+          TAG=$(date +'%Y%m%d%H%M%S')
+          echo "TAG=${TAG}" >> $GITHUB_ENV
+          echo "Latest build version: $TAG"
 
-      - name: Push Docker Image to Docker Hub
-        run: docker push uadeel421/nana-project:latest
+      - name: Build Multi-Stage Docker Image
+        run: |
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            --tag uadeel421/nana-project:latest \
+            --tag uadeel421/nana-project:${{ env.TAG }} \
+            --push .
+
+      - name: Sign the Docker Image
+        uses: sigstore/cosign-installer@v3.5.0
+        with:
+          cosign-release: 'v2.2.4'
+
+      - name: Cosign the Image
+        run: cosign sign --yes uadeel421/nana-project@${{ env.TAG }}
+

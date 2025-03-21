@@ -68,10 +68,13 @@ jobs:
             --tag uadeel421/nana-project:${{ env.TAG }} \
             --push .
 
-      - name: Sign the Docker Image
-        uses: sigstore/cosign-installer@v3.5.0
-        with:
-          cosign-release: 'v2.2.4'
+      - name: Cosign the Image
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        run: |
+          cosign sign --yes \
+            --oidc-client-id sigstore \
+            uadeel421/nana-project:${{ env.TAG }}
 
       - name: Cosign the Image
         run: cosign sign --yes uadeel421/nana-project@${{ env.TAG }}

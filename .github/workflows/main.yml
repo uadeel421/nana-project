@@ -65,7 +65,7 @@ jobs:
           docker buildx build \
             --platform linux/amd64 \
             --tag uadeel421/nana-project:latest \
-            --tag uadeel421/nana-project:${{ env.TAG }} \  # Using commit SHA as tag
+            --tag uadeel421/nana-project:${{ env.TAG }}  # Using commit SHA as tag
             --push .
 
 

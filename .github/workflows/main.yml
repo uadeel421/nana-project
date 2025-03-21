@@ -55,8 +55,11 @@ jobs:
 
       - name: Get Git Commit SHA
         id: version
-        run: echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
-
+        run: |
+          TAG=${GITHUB_SHA::7}
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "Using commit SHA as tag: $TAG"
+        
       - name: Build Multi-Stage Docker Image
         run: |
           docker buildx build \

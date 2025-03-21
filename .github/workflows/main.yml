@@ -59,13 +59,13 @@ jobs:
           TAG=${GITHUB_SHA::7}
           echo "TAG=$TAG" >> $GITHUB_ENV
           echo "Using commit SHA as tag: $TAG"
-        
+          
       - name: Build Multi-Stage Docker Image
         run: |
           docker buildx build \
             --platform linux/amd64 \
             --tag uadeel421/nana-project:latest \
-            --tag uadeel421/nana-project:${{ env.TAG }}  # Using commit SHA as tag
+            --tag uadeel421/nana-project:${{ env.TAG }} \
             --push .
-
+     
 

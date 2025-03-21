@@ -56,29 +56,16 @@ jobs:
       - name: Get Version & Generate Tags
         id: version
         run: |
-          TAG=$(date +'%Y%m%d%H%M%S')
+          TAG=$(date)
           echo "TAG=${TAG}" >> $GITHUB_ENV
           echo "Latest build version: $TAG"
 
       - name: Build Multi-Stage Docker Image
         run: |
           docker buildx build \
-            --platform linux/amd64,linux/arm64 \
-            --tag uadeel421/nana-project:latest \
+            --platform linux/amd64 \
             --tag uadeel421/nana-project:${{ env.TAG }} \
             --push .
             
-      - name: Set Up Cosign
-        uses: sigstore/cosign-installer@v3.5.0
-        with:
-          cosign-release: 'v2.2.4'      
-
-      - name: Cosign the Image (OIDC-based)
-        env:
-          COSIGN_EXPERIMENTAL: "true"
-        run: |
-          cosign sign --yes \
-            --oidc-client-id sigstore \
-            uadeel421/nana-project:${{ env.TAG }}
 
 

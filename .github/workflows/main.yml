@@ -68,6 +68,4 @@ jobs:
             --tag uadeel421/nana-project:${{ env.TAG }} \  # Using commit SHA as tag
             --push .
 
-            
-
 

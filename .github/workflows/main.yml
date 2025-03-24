@@ -67,5 +67,20 @@ jobs:
             --tag uadeel421/nana-project:latest \
             --tag uadeel421/nana-project:${{ env.TAG }} \
             --push .
-     
+
+      # 🚀 New Step: Authenticate with Azure
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}  
+      
+      # 🚀 New Step: Set AKS Context
+      - name: Set up AKS Credentials    
+        run: az aks get-credentials --resource-group KPRG --name KP_K8s_Cluster --overwrite-existing
+
+       # 🚀 New Step: Deploy to AKS
+      - name: Deploy to AKS
+        run: |
+          kubectl set image deployment/webapp-deployment webapp=uadeel421/nana-project:${{ env.TAG }}
+          kubectl rollout status deployment/webapp-deployment
 

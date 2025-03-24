@@ -4,7 +4,7 @@ let fs = require('fs');
 let MongoClient = require('mongodb').MongoClient;
 let app = express();
 
-// bodyParser was deprecated: https://stackoverflow.com/a/59892173S
+// bodyParser was deprecated: https://stackoverflow.com/a/59892173
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 

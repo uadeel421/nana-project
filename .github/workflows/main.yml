@@ -76,7 +76,7 @@ jobs:
       
       # 🚀 New Step: Set AKS Context
       - name: Set up AKS Credentials    
-        run: az aks get-credentials --resource-group KPRG --name KP_K8s_Cluster --overwrite-existing
+        run: az aks get-credentials --resource-group kprg --name kp_k8s_cluster --overwrite-existing
 
        # 🚀 New Step: Deploy to AKS
       - name: Deploy to AKS

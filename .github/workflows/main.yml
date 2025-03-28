@@ -81,6 +81,6 @@ jobs:
        # 🚀 New Step: Deploy to AKS
       - name: Deploy to AKS
         run: |
-          kubectl set image deployment/webapp-deployment webapp=uadeel421/nana-project:${{ env.TAG }} -n staging
-          kubectl rollout status deployment/webapp-deployment
+          kubectl set image deployment/webapp-deployment-staging webapp=uadeel421/nana-project:${{ env.TAG }} -n staging
+          kubectl rollout status deployment/webapp-deployment-staging
 

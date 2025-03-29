@@ -1,19 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webapp-deployment
+  name: webapp-deployment-staging
   labels:
     app: webapp
+    environment: staging
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: webapp
+      environment: staging
   template:
     metadata:
       labels:
         app: webapp
+        environment: staging
     spec:
+      nodeSelector:
+        environment: staging   # This ensures it runs on the staging node
       containers:
       - name: webapp
         image: uadeel421/nana-project:latest
@@ -23,29 +28,33 @@ spec:
         - name: USER_NAME
           valueFrom:
             secretKeyRef:
-              name: mongo-secret
+              name: mongo-secret-staging
               key: mongo-user
         - name: USER_PWD 
           valueFrom:
             secretKeyRef:
-              name: mongo-secret
+              name: mongo-secret-staging
               key: mongo-password 
         - name: DB_URL #DB endpoint
           valueFrom:
             configMapKeyRef:
-              name: mongo-config
+              name: mongo-config-staging
               key: mongo-url 
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: webapp-service
+  name: webapp-service-staging
+  labels:
+    environment: staging
 spec:
   type: LoadBalancer
   selector:
       app: webapp
+      environment: staging
   ports:
     - protocol: TCP
       port: 80
       targetPort: 3000
+  

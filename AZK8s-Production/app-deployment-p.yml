@@ -1,19 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webapp-deployment
+  name: webapp-deployment-production
   labels:
     app: webapp
+    environment: production
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: webapp
+      environment: production
   template:
     metadata:
       labels:
         app: webapp
+        environment: production
     spec:
+      nodeSelector:
+        environment: production   # This ensures it runs on the production node
       containers:
       - name: webapp
         image: uadeel421/nana-project:latest
@@ -23,30 +28,33 @@ spec:
         - name: USER_NAME
           valueFrom:
             secretKeyRef:
-              name: mongo-secret
+              name: mongo-secret-production
               key: mongo-user
         - name: USER_PWD 
           valueFrom:
             secretKeyRef:
-              name: mongo-secret
+              name: mongo-secret-production
               key: mongo-password 
         - name: DB_URL #DB endpoint
           valueFrom:
             configMapKeyRef:
-              name: mongo-config
+              name: mongo-config-production
               key: mongo-url 
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: webapp-service
+  name: webapp-service-production
+  labels:
+    environment: production
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
       app: webapp
+      environment: production
   ports:
     - protocol: TCP
       port: 80
       targetPort: 3000
-      nodePort: 30100
+  

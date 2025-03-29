@@ -1,19 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongo-deployment
+  name: mongo-deployment-production
   labels:
     app: mongo
+    environment: production
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: mongo
+      environment: production
   template:
     metadata:
       labels:
         app: mongo
+        environment: production
     spec:
+      nodeSelector:
+        environment: production   # This ensures it runs on the production node
       containers:
       - name: mongodb
         image: mongo:latest
@@ -23,23 +28,26 @@ spec:
         - name: MONGO_INITDB_ROOT_USERNAME
           valueFrom:
             secretKeyRef:
-              name: mongo-secret
+              name: mongo-secret-production
               key: mongo-user
         - name: MONGO_INITDB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mongo-secret
+              name: mongo-secret-production
               key: mongo-password      
         
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo-service
+  name: mongo-service-production
+  labels:
+    environment: production
 spec:
   selector:
-      app: mongo
+    app: mongo
+    environment: production
   ports:
     - protocol: TCP
       port: 27017
-      targetPort: 27017 
+      targetPort: 27017

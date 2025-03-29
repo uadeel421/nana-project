@@ -1,19 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongo-deployment
+  name: mongo-deployment-staging
   labels:
     app: mongo
+    environment: staging
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: mongo
+      environment: staging
   template:
     metadata:
-      labels:
+      labels: 
         app: mongo
+        environment: staging
     spec:
+      nodeSelector:
+        environment: staging   # This ensures it runs on the staging node
       containers:
       - name: mongodb
         image: mongo:latest
@@ -23,23 +28,26 @@ spec:
         - name: MONGO_INITDB_ROOT_USERNAME
           valueFrom:
             secretKeyRef:
-              name: mongo-secret
+              name: mongo-secret-staging
               key: mongo-user
         - name: MONGO_INITDB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mongo-secret
+              name: mongo-secret-staging
               key: mongo-password      
         
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo-service
+  name: mongo-service-staging
+  labels:
+    environment: staging
 spec:
   selector:
       app: mongo
+      environment: staging
   ports:
     - protocol: TCP
       port: 27017
-      targetPort: 27017 
+      targetPort: 27017

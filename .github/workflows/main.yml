@@ -63,7 +63,7 @@ jobs:
       - name: Build Multi-Stage Docker Image
         run: |
           docker buildx build \
-            --platform linux/amd64 \
+            --platform linux/amd64/arm64 \
             --tag uadeel421/nana-project:latest \
             --tag uadeel421/nana-project:${{ env.TAG }} \
             --push .

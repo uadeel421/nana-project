@@ -7,9 +7,6 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:  # Allows manual triggering
-  schedule:
-    - cron: '0 2 * * *'  # Runs daily at 2 AM UTC
-
 jobs:
   ci:
     name: Continuous Integration
